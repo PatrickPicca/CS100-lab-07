@@ -13,7 +13,7 @@
 
 #include <iostream>
 
-class factory
+class Factory
 {
 	public:
 		Base* parse(char** input, int length)
