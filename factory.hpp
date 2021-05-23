@@ -13,7 +13,9 @@
 
 #include <iostream>
 #include <cstring>
+#include <cmath>
 
+using namespace std;
 
 class Factory
 {
@@ -30,10 +32,8 @@ class Factory
 			std::string operators[op_length];
 				
 			for(int i=1;i<length;i++){ 
-			if (isdigit(input[i][0])){
-				for(int k=0;k<strlen(input[i]);k++){
-					count+= ((int)input[i][k]-48)*pow(10,(strlen(input[i]) - 1 - k));
-					}
+				if (input[i] == 0 | input[i][0] < 1000000){
+					count+= stod(input[i]);
 					operand[num1]=count;
 					num1++;
 					count = 0;
