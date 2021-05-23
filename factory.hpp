@@ -12,51 +12,91 @@
 #include <sub.hpp>
 
 #include <iostream>
+#include <cstring>
+
 
 class Factory
 {
 	public:
+		Factory(){};
+		~Factory(){};
 		Base* parse(char** input, int length)
 		{
-			
+			int op_length = length/2;
+			int count = 0;
+			int num1 = 0;
+			int num2 = 0;
+			int operand[op_length+1];
+			std::string operators[op_length];
 				
-			Base* left_op = nullptr;
-			for (int i = 2, i < ; i++){
-				if (input[i] == nullptr){
-					int num1 = stod(input[i++]);
-					left_op = new Op(num1);
-				}
-				if (input[i] == "+") {
-					int num2 = stod(input[++i]);
-					left_op = new Add(left_op, new Op(num));
-				}
-				else if(input[i] == "/") {
-					int num2 = stod(input[++i]);
-					left_op = new Div(left_op, new Op(num2));
-				}
-				else if(input[i]=="-") {
-					int num2 = stod(input[++i]);
-					left_op = new Sub(left_op, new Op(num2));
-				}
-				else if(input[i]=="*") {
-					int testing = i+1;
-					if (input[testing] =="*")
-					{
-						int num2 = stod(input[++testing]);
-						left_op = new Pow(left_op, new Op(num2));	
+			for(int i=1;i<length;i++){ 
+			if (isdigit(input[i][0])){
+				for(int k=0;k<strlen(input[i]);k++){
+					num+= ((int)input[i][k]-48)*pow(10,(strlen(input[i]) - 1 - k));
 					}
-					else {
-						int num2 = stod(input[++i]);
-						left_of = new Mult(left_op, new Op(num2));	
-					}
+					operand[count1]=num;
+					count1++;
+					num = 0;
+				}
+				else if (input[i] == "+" ||input[i]=="-" || input[i]=="/" || input[i]== "*" ||input[i]=="**"){
+					operators[count2]=input[i];
+					count2++;
 				}
 				else{
-					cout << "ERROR!" << endl;
+					std::cout<< "invalid input!";
 					return nullptr;
 				}
-				i++;
 			}
-			return left_op;
+			std:: string sign;
+			Base* val1;
+			Base* val2;
+			Base* val3;
+			Base* result;
+			temp1 = new Op(operand[0]);
+			temp2 = new Op(operand[1]);
+			sign = operators[0];
+		
+			if (sign=="+"){
+				val3 = new Add(val1, val2);		
+			}
+			else if (sign=="-"){
+				val3= new Sub(val1, val2);
+			}
+			else if (sign=="/"){
+				val3= new Div(val1, val2);
+			}
+			else if (sign=="*"){
+				val3= new Mult(val1, val2);
+			}
+			else if (sign=="**"){
+				val3= new Pow(val1, val2);
+			}
+			delete val1;
+			int count = 2;
+			for(int i = 1; i<op_length; i++){		
+				delete temp2;
+				val2 = new Op(operand[count]);
+				sign=operators[i];
+				if (sign=="+"){
+					result = new Add(val3, val2);
+				}
+				else if (sign=="-"){
+					result = new Sub(val3, val2);
+				}
+				else if (sign=="/"){
+					result = new Div(val3, val2);
+				}
+				else if (sign=="*"){
+					result = new Mult(val3, val2);	
+				}
+				else if (sign=="**"){
+					result = new Pow(val3, val2);
+				}
+				count++;
+			}
+			delete val2;
+			delete val3;
+			return result;	
 		}
 		
 };
