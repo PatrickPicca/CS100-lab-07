@@ -2,14 +2,14 @@
 #define __FACTORY_HPP__
 
 
-#include <add.hpp>
-#include <base.hpp>
-#include <div.hpp>
-#include <mult.hpp>
-#include <op.hpp>
-#include <pow.hpp>
-#include <rand.hpp>
-#include <sub.hpp>
+#include "add.hpp"
+#include "base.hpp"
+#include "div.hpp"
+#include "mult.hpp"
+#include "op.hpp"
+#include "pow.hpp"
+#include "rand.hpp"
+#include "sub.hpp"
 
 #include <iostream>
 #include <cstring>
@@ -32,15 +32,15 @@ class Factory
 			for(int i=1;i<length;i++){ 
 			if (isdigit(input[i][0])){
 				for(int k=0;k<strlen(input[i]);k++){
-					num+= ((int)input[i][k]-48)*pow(10,(strlen(input[i]) - 1 - k));
+					count+= ((int)input[i][k]-48)*pow(10,(strlen(input[i]) - 1 - k));
 					}
-					operand[count1]=num;
-					count1++;
-					num = 0;
+					operand[num1]=count;
+					num1++;
+					count = 0;
 				}
 				else if (input[i] == "+" ||input[i]=="-" || input[i]=="/" || input[i]== "*" ||input[i]=="**"){
-					operators[count2]=input[i];
-					count2++;
+					operators[num2]=input[i];
+					num2++;
 				}
 				else{
 					std::cout<< "invalid input!";
@@ -52,8 +52,8 @@ class Factory
 			Base* val2;
 			Base* val3;
 			Base* result;
-			temp1 = new Op(operand[0]);
-			temp2 = new Op(operand[1]);
+			val1 = new Op(operand[0]);
+			val2 = new Op(operand[1]);
 			sign = operators[0];
 		
 			if (sign=="+"){
@@ -72,10 +72,10 @@ class Factory
 				val3= new Pow(val1, val2);
 			}
 			delete val1;
-			int count = 2;
+			int counting = 2;
 			for(int i = 1; i<op_length; i++){		
-				delete temp2;
-				val2 = new Op(operand[count]);
+				delete val2;
+				val2 = new Op(operand[counting]);
 				sign=operators[i];
 				if (sign=="+"){
 					result = new Add(val3, val2);
@@ -92,7 +92,7 @@ class Factory
 				else if (sign=="**"){
 					result = new Pow(val3, val2);
 				}
-				count++;
+				counting++;
 			}
 			delete val2;
 			delete val3;
