@@ -13,7 +13,10 @@
 
 #include <iostream>
 #include <cstring>
+#include <cmath>
+#include <string>
 
+using namespace std;
 
 class Factory
 {
@@ -21,26 +24,33 @@ class Factory
 		Factory(){};
 		~Factory(){};
 		Base* parse(char** input, int length)
-		{
+		{	
 			int op_length = length/2;
-			int count = 0;
+			double count = 0;
 			int num1 = 0;
 			int num2 = 0;
-			int operand[op_length+1];
+			double operand[op_length+1];
 			std::string operators[op_length];
 				
-			for(int i=1;i<length;i++){ 
-			if (isdigit(input[i][0])){
-				for(int k=0;k<strlen(input[i]);k++){
-					num+= ((int)input[i][k]-48)*pow(10,(strlen(input[i]) - 1 - k));
-					}
-					operand[count1]=num;
-					count1++;
-					num = 0;
+			for(int i=0;i<length;i++){ 
+				//if (input[i] == 0 || atoi(input[i]) < 50000){
+				//	count+= atoi(input[i]);
+				//	operand[num1]=count;
+				//	num1++;
+				//	count = 0;
+				//}
+				if (input[i] == "+" ||input[i]=="-" || input[i]=="/" || input[i]== "*" ||input[i]=="**"){
+					operators[num2]=input[i];
+					num2++;
+				
 				}
-				else if (input[i] == "+" ||input[i]=="-" || input[i]=="/" || input[i]== "*" ||input[i]=="**"){
-					operators[count2]=input[i];
-					count2++;
+				else if (atof(input[i]) < 50000){
+				
+					count += atof(input[i]);
+					operand[num1]=count;
+					num1++;
+					count = 0;
+				
 				}
 				else{
 					std::cout<< "invalid input!";
@@ -52,15 +62,16 @@ class Factory
 			Base* val2;
 			Base* val3;
 			Base* result;
-			temp1 = new Op(operand[0]);
-			temp2 = new Op(operand[1]);
-			sign = operators[0];
+			val1 = new Op(operand[0]);
 		
+			val2 = new Op(operand[1]);
+			
+			sign = operators[0];
 			if (sign=="+"){
 				val3 = new Add(val1, val2);		
 			}
 			else if (sign=="-"){
-				val3= new Sub(val1, val2);
+				val3= new Sub(val1, val2);      
 			}
 			else if (sign=="/"){
 				val3= new Div(val1, val2);
@@ -71,32 +82,43 @@ class Factory
 			else if (sign=="**"){
 				val3= new Pow(val1, val2);
 			}
-			delete val1;
-			int count = 2;
-			for(int i = 1; i<op_length; i++){		
-				delete temp2;
-				val2 = new Op(operand[count]);
+
+			if (op_length == 1)
+				return val3;	
+		
+			int counting = 2;
+			
+			for(int i = 1; i<op_length; i++){	//If there are more than 1 operators in the passed in arguments.	
+			
+				Base* val4 = new Op(operand[counting]);
 				sign=operators[i];
 				if (sign=="+"){
-					result = new Add(val3, val2);
+			
+					result = new Add(val3, val4);
 				}
 				else if (sign=="-"){
-					result = new Sub(val3, val2);
+		
+					result = new Sub(val3, val4);
 				}
 				else if (sign=="/"){
-					result = new Div(val3, val2);
+					result = new Div(val3, val4);
 				}
 				else if (sign=="*"){
-					result = new Mult(val3, val2);	
+					result = new Mult(val3, val4);	
 				}
 				else if (sign=="**"){
-					result = new Pow(val3, val2);
+					result = new Pow(val3, val4);
 				}
-				count++;
+				counting++;
 			}
-			delete val2;
-			delete val3;
-			return result;	
+			if (result == nullptr){
+
+				return val3;
+			}
+			else
+			{
+				return result;
+			}	
 		}
 		
 };
