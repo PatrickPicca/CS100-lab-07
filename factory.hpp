@@ -39,24 +39,63 @@ class Factory
 				//	num1++;
 				//	count = 0;
 				//}
-				if (input[i] == "+" ||input[i]=="-" || input[i]=="/" || input[i]== "*" ||input[i]=="**"){
-					operators[num2]=input[i];
-					num2++;
-				
+				if (*input[i] == '+' || *input[i]=='-' || *input[i]=='/' || *input[i]== '*' || input[i] == "**"){
+						
+					if (*input[i] == '-' && input[i][1] != NULL && isdigit(input[i][1]))
+					{	
+						std::cout << "Negative sign found in first element of character!!!" << endl;
+						bool going = true;
+						for (int x = 1; x < strlen(input[i]); x++){
+							if (!isdigit(input[i][x])){
+								going = false;
+								//std::cout << "Here";
+							}
+						}
+						if (going == true){
+							//std::cout << "here" << endl;
+							count += atof(input[i]);
+							operand[num1]=count;
+							num1++;
+							count = 0;
+						}
+						else{
+							std::cout << "Invalid input!";
+							return nullptr;
+						}
+					}
+					else {
+						std::cout <<  "Else statement" << endl;
+						std::cout << input[i] << endl;
+						//std::cout << input[i];
+						if (strlen(input[i]) == 1) {
+							operators[num2] = input[i];
+							num2++;
+						}
+						else if (input[i] == "**")
+						{
+							operators[num2] = input[i];
+							num2++;
+						}
+						else{
+							std::cout <<"Invalid input!";
+							return nullptr;
+						}
+					}
 				}
 				else if (atof(input[i]) < 50000){
-				
+					//std::cout << atof(input[i]);	
 					count += atof(input[i]);
 					operand[num1]=count;
 					num1++;
 					count = 0;
-				
+			//return nullptr;	
 				}
 				else{
 					std::cout<< "invalid input!";
 					return nullptr;
 				}
 			}
+			
 			std:: string sign;
 			Base* val1;
 			Base* val2;
@@ -84,8 +123,9 @@ class Factory
 			}
 
 			if (op_length == 1)
-				return val3;	
-		
+				return val3;
+				
+			
 			int counting = 2;
 			
 			for(int i = 1; i<op_length; i++){	//If there are more than 1 operators in the passed in arguments.	
