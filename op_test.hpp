@@ -158,4 +158,34 @@ TEST(FactoryTest, DividingNeg){
         EXPECT_DOUBLE_EQ(Op->evaluate(), -10);
 }
 
+
+TEST(FactoryTest, AddingDec){
+        Factory test;
+        char *args[] = {(char *)"5.4", (char *)"+", (char *)"3.5"};
+        Base *Op = test.parse(args, 3);
+        EXPECT_DOUBLE_EQ(Op->evaluate(), 8.9);
+}
+
+TEST(FactoryTest, AddingDecNeg){
+        Factory test;
+        char *args[] = {(char *)"-7.9", (char *)"+", (char *)"1.3"};
+        Base *Op = test.parse(args, 3);
+        EXPECT_DOUBLE_EQ(Op->evaluate(), -6.6);
+}
+
+
+TEST(FactoryTest, DecMultDiv) {
+        Factory test;
+        char *args[] = { (char *)"3.5", (char *)"*", (char *)"2.5", (char *)"/", (char *)"2.5"};
+        Base *Op = test.parse(args, 5);
+        EXPECT_DOUBLE_EQ(Op->evaluate(), 3.5);
+}
+
+
+
+
+
+
+
+
 #endif
